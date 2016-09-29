@@ -1,12 +1,24 @@
 {
-  "name": "openshift-cartridge-nodejs-template",
-  "version": "1.0.1",
-  "description": "Custom Node.js cartridge for OpenShift - sample application",
-  "private": true,
-  "main": "start.js",
+  "name": "rss-joust",
+  "version": "0.0.1",
+  "description": "Sentiment and Volume analysis of major news channels around the world",
+  "main": "server.js",
   "scripts": {
-    "start": "node --use_strict start.js"
+    "start": "node server.js"
   },
-  "author": "Ionut-Cristian Florescu <ionut.florescu@gmail.com>",
-  "license": "ISC"
+  "author": "",
+  "license": "Unlicense",
+  "dependencies": {
+    "bitly": "^4.1.1",
+    "body-parser": "^1.15.1",
+    "bower": "^1.0.6",
+    "chalk": "^1.1.3",
+    "express": "^4.13.4",
+    "mongodb": "^2.1.18",
+    "rss-parser": "github:7ds7/rss-parser",
+    "sentiment": "^1.0.6",
+    "twit": "^2.2.4",
+    "vulcanize": "^1.14.8",
+    "yargs": "^4.7.1"
+  }
 }

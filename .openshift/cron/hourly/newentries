@@ -1,0 +1,33 @@
+#!/bin/bash
+cd $OPENSHIFT_REPO_DIR
+node parse_entries.js
+
+if [ `date +%H` == "23" ]
+then
+  sleep 30
+  node twitter_vs.js --timespan day
+  dayweek=$(date +%u)
+  currentday=$(date +%d)
+  lastday=$(cal `date '+%m'` `date '+%Y'` | grep . | fmt -1 | tail -1)
+  if [ $dayweek == 7 ]
+  then
+    sleep 30
+    node twitter_vs.js --timespan week
+  fi
+
+  if [ $currentday == $lastday ]
+  then
+    sleep 30
+    node twitter_vs.js --timespan month
+  fi
+
+  if [`date '+%d/%m'` == "31/12"]
+  then
+    sleep 30
+    node twitter_vs.js --timespan year
+  fi
+
+fi
+
+
+

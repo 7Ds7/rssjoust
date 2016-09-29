@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RSS Joust</title>
+    <meta name="description" content="Sentiment and Volume analysis of major news channels around the world">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="img/favicon.ico">
+
+    <meta property="og:url" content="http://binaryunit-rssjoust.rhcloud.com/">
+    <meta property="og:title" content="RSS Joust">
+    <meta property="og:description" content="Sentiment and Volume analysis of major news channels around the world">
+    <meta property="og:site_name" content="RSS Joust">
+    <meta property="og:image" content="http://binaryunit-rssjoust.rhcloud.com/img/rssjoust_cover.png">
+    <meta name="google-site-verification" content="AssIKQEq-WZ5bomPZcjjPCea-38zkxrlmfK1a8UlKiw">
+    <meta name="msvalidate.01" content="DE1121201390786EAD98720C84278B30" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.3/nv.d3.css">
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <link rel="stylesheet" href="/bower_components/flexboxgrid/dist/flexboxgrid.css" type="text/css" >
+
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
+    <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+
+    <link rel="import" href="/elements/elements.html">
+    <link rel="import" href="/css/dark-side/dark-side.html">
+
+
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  </head>
+  <body unresolved>
+
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+
+    <template is="dom-bind" id="app">
+
+      <header id="MainHeader" class="main-content container-fluid dark-box">
+        <a href="/about" title="About" class="top-menu"><iron-icon icon="icons:help"></iron-icon></a>
+        <h1 class="main-title hide">RSS JOUST</h1>
+        <div class="logo-wrapper"><img src="/img/rssjoust_logo.png" alt="RSS Joust Logo"></div>
+
+        <div class="meta-robot hide">Sentiment and Volume analysis of major news channels around the world</div>
+
+        <form is="iron-form" id="MainForm" method="post" action="/channels" on-iron-form-submit="realSubmit" on-iron-form-response="handleEntriesResponse" content-type="application/json">
+          <div class="row center-xs center-sm center-md center-lg middle-xs middle-sm middle-md middle-lg">
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+              <paper-input id="Word1Input" class="paper-input-word1" label="WORD 1" name="word1" value="palestine" on-keydown="inputKeyDown"></paper-input>
+            </div>
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+              <paper-button class="primary" raised on-tap="submitForm">VS</paper-button>
+            </div>
+            <div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
+              <paper-input id="Word2Input" class="paper-input-word2" label="WORD 2" name="word2" value="israel" on-keydown="inputKeyDown"></paper-input>
+            </div>
+          </div>
+          <input id="InputFrom" name="date_from" type="hidden" value="{{dateIso(dateFrom)}}">
+          <input id="InputTo" name="date_to" type="hidden" value="{{dateIso(dateTo)}}">
+        </form>
+
+      </header>
+
+      <nav id="GraphSelector" class="main-content container-fluid graph-selector dark-box hide">
+        <div class="row center-xs center-sm center-md center-lg middle-xs middle-sm middle-md middle-lg">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 center-xs center-sm end-md end-lg">
+            Select metric:
+            <paper-radio-group id="GraphRadio" on-iron-select="selectMeasure">
+              <paper-radio-button name="sentiment">Sentiment</paper-radio-button>
+              <paper-radio-button name="volume">Volume</paper-radio-button>
+            </paper-radio-group>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 center-xs center-sm start-md start-lg">
+              <div class="date-selector">
+                <strong>From: </strong>
+                <a href="#" on-tap="selectDate" data-idcalshow="PickerFrom" data-idcalhide="PickerTo">{{localizeDate(dateFrom)}}</a>
+                <strong>To: </strong>
+                <a href="#" on-tap="selectDate" data-idcalshow="PickerTo" data-idcalhide="PickerFrom">{{localizeDate(dateTo)}}</a>
+              </div>
+            </div>
+
+            <!-- <paper-input label="FROM" name="word2" value="israel" ></paper-input>
+            <paper-input label="TO" name="word2" value="israel" ></paper-input> -->
+
+        </div>
+      </nav>
+
+
+      <article id="MainContent" class="main-content container-fluid">
+
+        <div id="MainLoader" class="sk-cube-grid hide">
+          <div class="sk-cube sk-cube1"></div>
+          <div class="sk-cube sk-cube2"></div>
+          <div class="sk-cube sk-cube3"></div>
+          <div class="sk-cube sk-cube4"></div>
+          <div class="sk-cube sk-cube5"></div>
+          <div class="sk-cube sk-cube6"></div>
+          <div class="sk-cube sk-cube7"></div>
+          <div class="sk-cube sk-cube8"></div>
+          <div class="sk-cube sk-cube9"></div>
+        </div>
+
+        <div id="GraphWrapper" class="graph-wrapper">
+          <svg></svg>
+        </div>
+
+      </article>
+
+
+      <footer id="MainFooter" class="main-footer container-fluid dark-box">
+        <div class="row center-xs center-sm center-md center-lg middle-xs middle-sm middle-md middle-lg">
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <awesome-button type="twitter" sharer></awesome-button>
+            <awesome-button type="facebook" sharer></awesome-button>
+            <awesome-button type="plus" sharer></awesome-button>
+            <awesome-button type="linkedin" sharer></awesome-button>
+            <awesome-button type="pinterest" sharer></awesome-button>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 footer-credits">
+            follow the twitter account to get daily top hits <a href="https://twitter.com/rssjoust" target="_blank"> <iron-icon icon="social-iconset:twitter" class="size16 invert"></iron-icon> @rssjoust</a>
+            powered by: <a href="https://binaryunit.com" target="_blank">binaryunit.com</a>
+          </div>
+        </div>
+
+      </footer>
+
+
+      <div id="EntriesModal" class="entries-modal hide">
+        <div class="entries-modal-header ">
+          <a href="#" class="close-modal" on-tap="closeEntriesModal"><iron-icon icon="icons:close"></iron-icon></a>
+        </div>
+
+        <div class="entries-modal-heading row center center-xs center-sm center-md center-lg">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h1 class="margin-0 js-modal-heading"></h1>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="entries-modal-meta row center-xs center-sm center-md center-lg middle-xs middle-sm middle-md middle-lg">
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <h2 class="margin-top-0 margin-bottom-0 js-modal-meta-word"></h2>
+              </div>
+              <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <div class="meta-score-badge">
+                  <h2 class="margin-top-0 margin-bottom-0 js-modal-meta-score"></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="entries-modal-body js-entries-modal-body">
+        </div>
+
+      </div>
+
+      <paper-dialog id="CalendarModal" class="paper-date-picker-dialog" modal on-iron-overlay-closed="dismissCalendar">
+
+        <paper-date-picker id="PickerFrom"></paper-date-picker>
+        <paper-date-picker id="PickerTo"></paper-date-picker>
+
+        <div class="buttons">
+          <paper-button dialog-dismiss>Cancel</paper-button>
+          <paper-button dialog-confirm>OK</paper-button>
+        </div>
+      </paper-dialog>
+    </template>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.3/nv.d3.js"></script>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <!-- <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+
+    ga('create', 'UA-XXX-1', 'auto');
+    ga('send', 'pageview');
+
+  </script> -->
+
+</html>

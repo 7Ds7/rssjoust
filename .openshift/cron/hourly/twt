@@ -1,0 +1,30 @@
+#!/bin/bash
+echo 'Started cron Twitter'
+cd $OPENSHIFT_REPO_DIR || exit
+
+if [ $(date +%H) == "23" ]
+then
+  echo 'Send twitter daily'
+  node twitter_vs.js --timespan day
+  dayweek=$(date +%u)
+  currentday=$(date +%d)
+  lastday=$(cal $(date '+%m') $(date '+%Y') | grep . | fmt -1 | tail -1)
+  if [ $dayweek == 7 ]
+  then
+  echo 'Send twitter weekly'
+    node twitter_vs.js --timespan week
+  fi
+
+  if [ $currentday == $lastday ]
+  then
+    echo 'Send twitter monthly'
+    node twitter_vs.js --timespan month
+  fi
+
+  if [ $(date '+%d/%m') == "31/12" ]
+  then
+    echo 'Send twitter yearly'
+    node twitter_vs.js --timespan year
+  fi
+
+fi

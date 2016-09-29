@@ -1,0 +1,3 @@
+HOME=$OPENSHIFT_REPO_DIR && cd $HOME && bower install
+echo vulcanizing
+cd $HOME/public/elements && vulcanize -o elements.html elements.html

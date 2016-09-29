@@ -1,0 +1,42 @@
+{
+  "name": "rss-joust",
+  "description": "Sentiment and Volume analysis of major news channels around the world",
+  "main": [
+    "public/js/app.js"
+  ],
+  "authors": [
+    "7Ds7 <dinisimoes@gmail.com>"
+  ],
+  "license": "Unlicense",
+  "keywords": [
+    "one",
+    "keyword"
+  ],
+  "homepage": "binaryunit-rssjoust.rhcloud.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^1.4.0",
+    "iron-ajax": "^1.2.0",
+    "loaders.css": "^0.1.2",
+    "iron-form": "PolymerElements/iron-form#^1.0.16",
+    "paper-styles": "PolymerElements/paper-styles#^1.1.4",
+    "paper-input": "PolymerElements/paper-input#^1.1.11",
+    "flexboxgrid": "^6.3.0",
+    "paper-button": "PolymerElements/paper-button#^1.0.11",
+    "paper-radio-group": "^1.1.0",
+    "paper-radio-button": "^1.1.2",
+    "iron-icons": "^1.1.3",
+    "awesome-button": "*",
+    "paper-date-picker": "polymer-paper-date-picker#^1.1.4",
+    "paper-dialog": "^1.0.4",
+    "paper-dialog-scrollable": "^1.1.4",
+    "social-iconset": "^0.0.4"
+  }
+}

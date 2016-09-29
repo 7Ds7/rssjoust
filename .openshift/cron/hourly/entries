@@ -1,0 +1,4 @@
+#!/bin/bash
+echo 'Started cron entries'
+cd $OPENSHIFT_REPO_DIR || exit
+node parse_entries.js

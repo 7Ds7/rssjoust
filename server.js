@@ -109,7 +109,7 @@ function getEntries (channels, res, rbody) {
  * Constructs object from entries to serve back
  * @param  {object} channels channels object from db
  * @param  {object} entries  entries object from db
- * @param  {object} rbody    request body
+ * @param  {object} rbody    request  body
  * @param  {object} db       database connection
  * @param  {object} res      response object
  * @return {object}          [description]

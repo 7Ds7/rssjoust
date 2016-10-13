@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: binaryunit-rssjoust.rhcloud.com/robots.txt
